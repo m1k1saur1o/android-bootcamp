@@ -5,7 +5,7 @@ fun main () {
     menu(users)
 }
 
-class User (val name : String,
+class User (private val name : String,
             private val age : Int,
             private val work : String?,
             private val reference : User?) {
@@ -17,6 +17,10 @@ class User (val name : String,
         if (work != null) println("Trabajo: $work")
         if (reference != null) println("Fue citado por: ${reference.name} de ${reference.age} años")
 
+    }
+
+    fun getName() : String {
+        return name
     }
 }
 
@@ -54,7 +58,7 @@ fun getIndex(users: List<User>) : Int {
     var index : Int?
 
     users.forEachIndexed { i, user ->
-        println("Índice: $i | Usuario: ${user.name}")
+        println("Índice: $i | Usuario: ${user.getName()}")
     }
 
     do {
