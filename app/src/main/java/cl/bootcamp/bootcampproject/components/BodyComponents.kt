@@ -1,6 +1,8 @@
 package cl.bootcamp.bootcampproject.components
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
@@ -14,7 +16,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
 
 @Composable
 fun WelcomeText(
@@ -77,11 +80,22 @@ fun ShowImageButton(
 }
 
 @Composable
-fun ShowImage(
-    link: String
+fun ShowImageList(
+    items: List<Int>
 ) {
-    AsyncImage(
-        model = link,
-        contentDescription = "Description",
-    )
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        items(items.size) { index ->
+            Image(
+                painter = painterResource(id = items[index]),
+                contentDescription = "",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp)
+            )
+        }
+    }
 }

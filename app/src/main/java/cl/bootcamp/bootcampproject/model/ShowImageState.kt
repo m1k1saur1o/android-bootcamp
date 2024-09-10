@@ -1,11 +1,18 @@
 package cl.bootcamp.bootcampproject.model
+import cl.bootcamp.bootcampproject.R
 
 data class ShowImageState (
     val isPressed: Boolean = false,
-    val isPressedText: String =  "Hide Image",
-    val isNotPressedText: String = "Show Image",
-    val imageURL: String = "https://www.shutterstock.com/shutterstock/photos/1126305455/display_1500/stock-vector-dinosaur-rock-singer-holding-microphone-tyrannosaurus-or-t-rex-vector-illustration-1126305455.jpg",
+    val isPressedText: String =  "Hide List",
+    val isNotPressedText: String = "Show List",
     val name: String = "Miguel G",
-    val welcomeText: String = "Welcome!"
+    val welcomeText: String = "Welcome!",
+    val imagePaths: List<Int> = listOf(
+        R.drawable.img1,
+        R.drawable.img2,
+        R.drawable.img3,
+        R.drawable.img4,
+        R.drawable.img5
+    )
 
 )
