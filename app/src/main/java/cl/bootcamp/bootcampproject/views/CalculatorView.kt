@@ -41,7 +41,7 @@ fun ContentCalculatorView(
     viewModel: CalculatorViewModel
 ) {
 
-    val options: List<String> = listOf("Man", "Woman")
+    val state = viewModel.state
 
     Column(
         modifier = Modifier
@@ -61,13 +61,13 @@ fun ContentCalculatorView(
         )
 
         SingleChoiceSegmentedButtonRow {
-            options.forEachIndexed { i, label ->
+            state.options.forEachIndexed { i, label ->
                 SegmentedButton(
-                    selected = i == viewModel.selectedIndex,
+                    selected = i == state.selectedIndex,
                     onClick = {viewModel.changeSelected(i)},
                     shape = SegmentedButtonDefaults.itemShape(
                         index = i,
-                        count = options.size
+                        count = state.options.size
                     )
                 ) {
                     Text(text = label)
@@ -80,7 +80,7 @@ fun ContentCalculatorView(
         )
 
         InputTextField(
-            value = viewModel.age,
+            value = state.age,
             onValueChange = {viewModel.onValueChangeAge(it)},
             label = "Age"
         )
@@ -90,7 +90,7 @@ fun ContentCalculatorView(
         )
 
         InputTextField(
-            value = viewModel.height,
+            value = state.height,
             onValueChange = {viewModel.onValueChangeHeight(it)},
             label = "Height [cm]"
         )
@@ -100,7 +100,7 @@ fun ContentCalculatorView(
         )
 
         InputTextField(
-            value = viewModel.weight,
+            value = state.weight,
             onValueChange = {viewModel.onValueChangeWeight(it)},
             label = "Weight [kg]"
         )
@@ -108,7 +108,7 @@ fun ContentCalculatorView(
         CalculateButton(
             text = "Calculate"
         ) {
-            viewModel.calculateBmi(viewModel.height.toDouble(), viewModel.weight.toDouble())
+            viewModel.calculateBmi(state.height.toDouble(), state.weight.toDouble())
         }
 
         Spacer(
@@ -116,7 +116,7 @@ fun ContentCalculatorView(
         )
 
         ResultText(
-            text = viewModel.result
+            text = state.result
         )
 
     }

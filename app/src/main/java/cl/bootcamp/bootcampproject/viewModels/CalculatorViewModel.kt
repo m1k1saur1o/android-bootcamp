@@ -4,38 +4,28 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import cl.bootcamp.bootcampproject.model.CalculateState
 import java.util.Locale
 
 class CalculatorViewModel: ViewModel() {
-    var age by mutableStateOf("")
-        private set
 
-    var height by mutableStateOf("")
-        private set
-
-    var weight by mutableStateOf("")
-        private set
-
-    var selectedIndex by mutableStateOf(1)
-        private set
-
-    var result by mutableStateOf("")
+    var state by mutableStateOf(CalculateState())
         private set
 
     fun onValueChangeAge(value: String) {
-        age = value
+        state = state.copy(age = value)
     }
 
     fun onValueChangeHeight(value: String) {
-        height = value
+        state = state.copy(height = value)
     }
 
     fun onValueChangeWeight(value: String) {
-        weight = value
+        state = state.copy(weight = value)
     }
 
     fun changeSelected(index: Int) {
-        selectedIndex = index
+        state = state.copy(selectedIndex = index)
     }
 
     fun calculateBmi(
@@ -43,7 +33,7 @@ class CalculatorViewModel: ViewModel() {
         weight: Double
     ) {
         val bmiResult = weight / ((height * height) / 10000)
-        result = String.format(Locale.US,"%.1f", bmiResult)
+        state = state.copy(result = String.format(Locale.US,"%.1f", bmiResult))
     }
 
 }
