@@ -19,11 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cl.bootcamp.bootcampproject.components.CalculateButton
 import cl.bootcamp.bootcampproject.components.InputTextField
+import cl.bootcamp.bootcampproject.components.ResultText
 import cl.bootcamp.bootcampproject.components.TitleText
 import cl.bootcamp.bootcampproject.viewModels.CalculatorViewModel
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalculatorView(
     modifier: Modifier,
@@ -93,7 +92,7 @@ fun ContentCalculatorView(
         InputTextField(
             value = viewModel.height,
             onValueChange = {viewModel.onValueChangeHeight(it)},
-            label = "Height"
+            label = "Height [cm]"
         )
 
         Spacer(
@@ -103,12 +102,22 @@ fun ContentCalculatorView(
         InputTextField(
             value = viewModel.weight,
             onValueChange = {viewModel.onValueChangeWeight(it)},
-            label = "Weight"
+            label = "Weight [kg]"
         )
 
         CalculateButton(
             text = "Calculate"
-        ) {}
+        ) {
+            viewModel.calculateBmi(viewModel.height.toDouble(), viewModel.weight.toDouble())
+        }
+
+        Spacer(
+            modifier =  Modifier.height(36.dp)
+        )
+
+        ResultText(
+            text = viewModel.result
+        )
 
     }
 }

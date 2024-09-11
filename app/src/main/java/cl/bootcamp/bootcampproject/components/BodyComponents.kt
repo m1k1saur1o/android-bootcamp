@@ -67,3 +67,20 @@ fun TitleText(
         )
     )
 }
+
+@Composable
+fun ResultText(
+    text: String
+) {
+    Text(
+        text = text,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp),
+        style = TextStyle(
+            fontSize = 96.sp,
+            fontWeight = FontWeight.ExtraBold,
+            textAlign = TextAlign.Center
+        )
+    )
+}
