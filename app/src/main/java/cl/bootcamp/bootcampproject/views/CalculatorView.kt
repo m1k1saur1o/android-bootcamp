@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cl.bootcamp.bootcampproject.components.CalculateButton
+import cl.bootcamp.bootcampproject.components.Modal
 import cl.bootcamp.bootcampproject.components.InputTextField
 import cl.bootcamp.bootcampproject.components.ResultText
 import cl.bootcamp.bootcampproject.components.TitleText
@@ -108,7 +109,12 @@ fun ContentCalculatorView(
         CalculateButton(
             text = "Calculate"
         ) {
-            viewModel.calculateBmi(state.height.toDouble(), state.weight.toDouble())
+            try {
+                viewModel.ageCheck()
+                viewModel.calculateBmi(state.height.toDouble(), state.weight.toDouble())
+            } catch (_ : NumberFormatException) {
+                viewModel.showModal()
+            }
         }
 
         Spacer(
@@ -118,6 +124,21 @@ fun ContentCalculatorView(
         ResultText(
             text = state.result
         )
+
+        if (state.showModal) {
+            Modal(
+                title = "Error",
+                onDismiss = {viewModel.hideModal()},
+                onConfirmClick = {
+                    CalculateButton(
+                        text = "Ok"
+                    ) {
+                        viewModel.hideModal()
+                    }
+                },
+                onText = {viewModel.GenerateErrorMessage()},
+            )
+        }
 
     }
 }

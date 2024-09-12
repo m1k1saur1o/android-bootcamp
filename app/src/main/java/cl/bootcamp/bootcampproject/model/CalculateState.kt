@@ -6,5 +6,6 @@ data class CalculateState(
     val weight: String = "",
     val selectedIndex: Int? = null,
     val result: String = "",
-    val options: List<String> = listOf("Man", "Woman")
+    val options: List<String> = listOf("Man", "Woman"),
+    val showModal: Boolean = false
 )
