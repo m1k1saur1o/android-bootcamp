@@ -94,7 +94,7 @@ fun ResultText(
 }
 
 @Composable
-fun Modal(
+fun CalculatorModal(
     title: String,
     onDismiss: () -> Unit,
     onConfirmClick: @Composable () -> Unit,

@@ -5,13 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.ui.Modifier
-import cl.bootcamp.bootcampproject.ui.theme.BootcampProjectTheme
+import cl.bootcamp.bootcampproject.navigation.NavManager
 import cl.bootcamp.bootcampproject.viewModels.CalculatorViewModel
-import cl.bootcamp.bootcampproject.views.CalculatorView
+import cl.bootcamp.bootcampproject.viewModels.PatientListViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,16 +15,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         val calculatorModel: CalculatorViewModel by viewModels()
+        val patientListModel: PatientListViewModel by viewModels()
 
         setContent {
-            BootcampProjectTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    CalculatorView(
-                        modifier = Modifier.padding(innerPadding),
-                        viewModel = calculatorModel
-                    )
-                }
-            }
+            NavManager(
+                calculatorModel,
+                patientListModel,
+                )
         }
     }
 }

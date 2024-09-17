@@ -1,8 +1,8 @@
 package cl.bootcamp.bootcampproject.views
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -17,38 +17,45 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import cl.bootcamp.bootcampproject.components.CalculateButton
-import cl.bootcamp.bootcampproject.components.Modal
+import cl.bootcamp.bootcampproject.components.CalculatorModal
 import cl.bootcamp.bootcampproject.components.InputTextField
 import cl.bootcamp.bootcampproject.components.ResultText
 import cl.bootcamp.bootcampproject.components.TitleText
 import cl.bootcamp.bootcampproject.viewModels.CalculatorViewModel
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun CalculatorView(
-    modifier: Modifier,
-    viewModel: CalculatorViewModel
+    viewModel: CalculatorViewModel,
+    navController: NavController,
+    id: Int
 ) {
     Scaffold()
     {
-        ContentCalculatorView(it, viewModel)
+        ContentCalculatorView(
+            viewModel = viewModel,
+            navController = navController,
+            id = id,
+        )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContentCalculatorView(
-    paddingValues: PaddingValues,
-    viewModel: CalculatorViewModel
+    viewModel: CalculatorViewModel,
+    navController: NavController,
+    id: Int
 ) {
 
     val state = viewModel.state
 
     Column(
         modifier = Modifier
-            .padding(paddingValues)
-            .padding(16.dp)
-            .padding(top = 32.dp)
+            .padding(4.dp)
+            .padding(top = 48.dp)
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
@@ -126,7 +133,7 @@ fun ContentCalculatorView(
         )
 
         if (state.showModal) {
-            Modal(
+            CalculatorModal(
                 title = "Error",
                 onDismiss = {viewModel.hideModal()},
                 onConfirmClick = {
