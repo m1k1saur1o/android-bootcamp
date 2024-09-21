@@ -25,7 +25,7 @@ import cl.bootcamp.bootcampproject.components.BmiResultText
 import cl.bootcamp.bootcampproject.components.BmiStateText
 import cl.bootcamp.bootcampproject.components.TitleText
 import cl.bootcamp.bootcampproject.viewModels.CalculatorViewModel
-import androidx.activity.compose.BackHandler
+import androidx.compose.runtime.DisposableEffect
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -36,9 +36,10 @@ fun CalculatorView(
 ) {
     Scaffold()
     {
-        BackHandler {
-            viewModel.clean()
-            navController.popBackStack()
+        DisposableEffect(Unit) {
+            onDispose {
+                viewModel.clean()
+            }
         }
 
         ContentCalculatorView(
@@ -172,15 +173,19 @@ fun ContentCalculatorView(
                 text = "Save"
             ) {
                 val gender = if (state.selectedIndex == 0) "male" else "female"
+                val bmiResult = viewModel.state.result
+                val age = viewModel.state.age
+
                 navController.navigate(
                     "Home" +
                             "/${id}" +
-                            "/${viewModel.state.result}" +
+                            "/${bmiResult}" +
                             "/${gender}" +
-                            "/${viewModel.state.age}" +
+                            "/${age}" +
                             "/${bmiStateText.first}" +
                             "/${state.isCalculated}/"
                 )
+
                 viewModel.clean()
             }
         }
