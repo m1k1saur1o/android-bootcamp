@@ -21,9 +21,11 @@ import androidx.navigation.NavController
 import cl.bootcamp.bootcampproject.components.CalculateButton
 import cl.bootcamp.bootcampproject.components.CalculatorModal
 import cl.bootcamp.bootcampproject.components.InputTextField
-import cl.bootcamp.bootcampproject.components.ResultText
+import cl.bootcamp.bootcampproject.components.BmiResultText
+import cl.bootcamp.bootcampproject.components.BmiStateText
 import cl.bootcamp.bootcampproject.components.TitleText
 import cl.bootcamp.bootcampproject.viewModels.CalculatorViewModel
+import androidx.activity.compose.BackHandler
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -34,6 +36,11 @@ fun CalculatorView(
 ) {
     Scaffold()
     {
+        BackHandler {
+            viewModel.clean()
+            navController.popBackStack()
+        }
+
         ContentCalculatorView(
             viewModel = viewModel,
             navController = navController,
@@ -65,14 +72,14 @@ fun ContentCalculatorView(
         )
 
         Spacer(
-            modifier =  Modifier.height(32.dp)
+            modifier = Modifier.height(32.dp)
         )
 
         SingleChoiceSegmentedButtonRow {
             state.options.forEachIndexed { i, label ->
                 SegmentedButton(
                     selected = i == state.selectedIndex,
-                    onClick = {viewModel.changeSelected(i)},
+                    onClick = { viewModel.changeSelected(i) },
                     shape = SegmentedButtonDefaults.itemShape(
                         index = i,
                         count = state.options.size
@@ -84,58 +91,63 @@ fun ContentCalculatorView(
         }
 
         Spacer(
-            modifier =  Modifier.height(16.dp)
+            modifier = Modifier.height(16.dp)
         )
 
         InputTextField(
             value = state.age,
-            onValueChange = {viewModel.onValueChangeAge(it)},
+            onValueChange = { viewModel.onValueChangeAge(it) },
             label = "Age"
         )
 
         Spacer(
-            modifier =  Modifier.height(8.dp)
+            modifier = Modifier.height(8.dp)
         )
 
         InputTextField(
             value = state.height,
-            onValueChange = {viewModel.onValueChangeHeight(it)},
+            onValueChange = { viewModel.onValueChangeHeight(it) },
             label = "Height [cm]"
         )
 
         Spacer(
-            modifier =  Modifier.height(8.dp)
+            modifier = Modifier.height(8.dp)
         )
 
         InputTextField(
             value = state.weight,
-            onValueChange = {viewModel.onValueChangeWeight(it)},
+            onValueChange = { viewModel.onValueChangeWeight(it) },
             label = "Weight [kg]"
         )
 
         CalculateButton(
             text = "Calculate"
         ) {
-            try {
-                viewModel.ageCheck()
-                viewModel.calculateBmi(state.height.toDouble(), state.weight.toDouble())
-            } catch (_ : NumberFormatException) {
+            if (state.selectedIndex != null) {
+                try {
+                    viewModel.ageCheck()
+                    viewModel.calculateBmi(state.height.toDouble(), state.weight.toDouble())
+                    viewModel.isCalculated()
+                } catch (_: NumberFormatException) {
+                    viewModel.showModal()
+                }
+            } else {
                 viewModel.showModal()
             }
         }
 
         Spacer(
-            modifier =  Modifier.height(36.dp)
+            modifier = Modifier.height(36.dp)
         )
 
-        ResultText(
+        BmiResultText(
             text = state.result
         )
 
         if (state.showModal) {
             CalculatorModal(
                 title = "Error",
-                onDismiss = {viewModel.hideModal()},
+                onDismiss = { viewModel.hideModal() },
                 onConfirmClick = {
                     CalculateButton(
                         text = "Ok"
@@ -143,8 +155,34 @@ fun ContentCalculatorView(
                         viewModel.hideModal()
                     }
                 },
-                onText = {viewModel.GenerateErrorMessage()},
+                onText = { viewModel.GenerateErrorMessage() },
             )
+        }
+
+        if (state.isCalculated) {
+            val bmi = viewModel.getBmi()
+            val bmiStateText = viewModel.generateBmiStateText(bmi)
+
+            BmiStateText(
+                text = bmiStateText.first,
+                color = bmiStateText.second
+            )
+
+            CalculateButton(
+                text = "Save"
+            ) {
+                val gender = if (state.selectedIndex == 0) "male" else "female"
+                navController.navigate(
+                    "Home" +
+                            "/${id}" +
+                            "/${viewModel.state.result}" +
+                            "/${gender}" +
+                            "/${viewModel.state.age}" +
+                            "/${bmiStateText.first}" +
+                            "/${state.isCalculated}/"
+                )
+                viewModel.clean()
+            }
         }
 
     }

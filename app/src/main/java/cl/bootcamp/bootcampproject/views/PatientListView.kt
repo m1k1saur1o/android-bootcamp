@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cl.bootcamp.bootcampproject.components.AddPatientFloatingButton
 import cl.bootcamp.bootcampproject.components.AddPatientModal
+import cl.bootcamp.bootcampproject.components.CalculatedBmiPatientCard
 import cl.bootcamp.bootcampproject.components.CancelSaveButton
 import cl.bootcamp.bootcampproject.components.PatientCard
 import cl.bootcamp.bootcampproject.components.SavePatientButton
@@ -34,6 +35,12 @@ import cl.bootcamp.bootcampproject.viewModels.PatientListViewModel
 fun PatientListView(
     viewModel: PatientListViewModel,
     navController: NavController,
+    id: Int?,
+    bmi: String?,
+    gender: String?,
+    age: String?,
+    bmiState: String?,
+    isCalculated: Boolean?
 ) {
     Scaffold(
         topBar = {
@@ -55,6 +62,12 @@ fun PatientListView(
         ContentPatientListView(
             viewModel = viewModel,
             navController = navController,
+            id = id,
+            bmi = bmi,
+            gender = gender,
+            age = age,
+            bmiState = bmiState,
+            isCalculated = isCalculated
         )
     }
 }
@@ -62,9 +75,27 @@ fun PatientListView(
 @Composable
 fun ContentPatientListView(
     viewModel: PatientListViewModel,
-    navController: NavController
+    navController: NavController,
+    id: Int?,
+    bmi: String?,
+    gender: String?,
+    age: String?,
+    bmiState: String?,
+    isCalculated: Boolean?
 ) {
     val state = viewModel.state
+
+    if (id != 0 && isCalculated!!) {
+        viewModel.addBmi(
+            id!!,
+            isCalculated,
+            bmi!!,
+            bmiState!!,
+            gender!!,
+            age!!
+        )
+    }
+
 
     LazyColumn(
         modifier = Modifier
@@ -75,15 +106,30 @@ fun ContentPatientListView(
         verticalArrangement = Arrangement.Top
     ) {
         items(viewModel.patientList) { item ->
-            PatientCard(
-                name = item.name,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp),
-                onClick = {
-                    navController.navigate("BmiCalculator/${item.id}/")
-                }
-            )
+
+            if (item.isBmiCalculated) {
+                CalculatedBmiPatientCard(
+                    name = item.name,
+                    age = item.age,
+                    bmi = item.bmi,
+                    gender = item.gender,
+                    bmiState = item.bmiState,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                )
+            } else {
+                PatientCard(
+                    name = item.name,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp),
+                    onClick = {
+                        navController.navigate("BmiCalculator/${item.id}/")
+                    }
+                )
+            }
+
         }
     }
 
@@ -115,14 +161,14 @@ fun ContentPatientListView(
 
                     CancelSaveButton(
                         text = "Cancel",
-                        ) {
+                    ) {
                         viewModel.hideAddModal()
                         viewModel.clean()
                     }
 
                     SavePatientButton(
                         text = "Add",
-                        ) {
+                    ) {
                         if (state.name.isNotBlank()) {
                             viewModel.addPatient(
                                 name = state.name

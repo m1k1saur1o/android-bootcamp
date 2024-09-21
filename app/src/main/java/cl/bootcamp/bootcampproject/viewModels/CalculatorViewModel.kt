@@ -8,17 +8,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
-import cl.bootcamp.bootcampproject.model.CalculateState
+import cl.bootcamp.bootcampproject.model.CalculatorState
 import java.util.Locale
 
-class CalculatorViewModel: ViewModel() {
+class CalculatorViewModel : ViewModel() {
 
-    var state by mutableStateOf(CalculateState())
+    var state by mutableStateOf(CalculatorState())
         private set
 
     fun onValueChangeAge(value: String) {
@@ -42,22 +43,38 @@ class CalculatorViewModel: ViewModel() {
         weight: Double
     ) {
         val bmiResult = weight / ((height * height) / 10000)
-        state = state.copy(result = String.format(Locale.US,"%.1f", bmiResult))
+        state = state.copy(result = String.format(Locale.US, "%.1f", bmiResult))
     }
 
-    fun showModal () {
+    fun showModal() {
         state = state.copy(showModal = true)
     }
 
-    fun hideModal () {
+    fun hideModal() {
         state = state.copy(showModal = false)
+    }
+
+    fun isCalculated() {
+        state = state.copy(isCalculated = true)
+    }
+
+    fun isNotCalculated() {
+        state = state.copy(isCalculated = false)
+    }
+
+    fun getBmi(): Double {
+        return state.result.toDouble()
     }
 
     @Composable
     fun GenerateErrorMessage() {
         var errorMessage = ""
 
-        if(intParseCheck(state.age)) {
+        if (state.selectedIndex == null) {
+            errorMessage += "Select a gender.\n"
+        }
+
+        if (intParseCheck(state.age)) {
             errorMessage += "Enter a correct age.\n"
         }
 
@@ -81,6 +98,18 @@ class CalculatorViewModel: ViewModel() {
         )
     }
 
+    fun generateBmiStateText(bmi: Double): Pair<String, Color> {
+        return when {
+            bmi < 18.5 -> Pair("Underweight", Color.Blue)
+            bmi in 18.5 .. 24.9 -> Pair("Healthy", Color.Green)
+            bmi in 25.0 .. 29.9 -> Pair("Overweight", Color.Yellow)
+            bmi in 30.0 .. 34.9 -> Pair("Obesity Class 1", Color.Red)
+            bmi in 35.0 .. 39.9 -> Pair("Obesity Class 2", Color.Red)
+            bmi > 40.0 -> Pair("Obesity Class 3", Color.Red)
+            else -> Pair("", Color.White)
+        }
+    }
+
     fun ageCheck() {
         state.age.toInt()
     }
@@ -91,5 +120,17 @@ class CalculatorViewModel: ViewModel() {
 
     private fun intParseCheck(input: String): Boolean {
         return input.toIntOrNull() == null
+    }
+
+    fun clean() {
+        state = state.copy(
+            age = "",
+            height = "",
+            weight = "",
+            selectedIndex = null,
+            result = "",
+            showModal = false,
+            isCalculated = false,
+        )
     }
 }

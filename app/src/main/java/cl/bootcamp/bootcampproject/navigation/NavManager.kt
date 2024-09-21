@@ -20,13 +20,35 @@ fun NavManager(
 
     NavHost(
         navController = navController,
-        startDestination = "Home"
+        startDestination = "Home/{id}/{bmi}/{gender}/{age}/{bmiState}/{isCalculated}/"
     )
     {
-        composable("Home") {
+        composable(
+            "Home/{id}/{bmi}/{gender}/{age}/{bmiState}/{isCalculated}/", arguments = listOf(
+                navArgument("id") { type = NavType.IntType },
+                navArgument("gender") { type = NavType.StringType },
+                navArgument("bmi") { type = NavType.StringType },
+                navArgument("age") { type = NavType.StringType },
+                navArgument("bmiState") { type = NavType.StringType},
+                navArgument("isCalculated") { type = NavType.BoolType}
+            )
+        ) {
+            val id = it.arguments?.getInt("id") ?: 0
+            val bmi = it.arguments?.getString("bmi") ?: ""
+            val gender = it.arguments?.getString("gender") ?: ""
+            val age = it.arguments?.getString("age") ?: ""
+            val bmiState = it.arguments?.getString("bmiState") ?: ""
+            val isCalculated = it.arguments?.getBoolean("isCalculated") ?: false
+
             PatientListView(
                 viewModel = patientListModel,
                 navController = navController,
+                id = id,
+                bmi = bmi,
+                gender = gender,
+                age = age,
+                bmiState = bmiState,
+                isCalculated = isCalculated
             )
         }
 

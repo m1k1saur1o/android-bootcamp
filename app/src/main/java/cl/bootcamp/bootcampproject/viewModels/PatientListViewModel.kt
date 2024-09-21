@@ -35,6 +35,29 @@ class PatientListViewModel: ViewModel() {
         patientList += newPatient
     }
 
+    fun addBmi (
+        id: Int,
+        isCalculated: Boolean,
+        bmi: String,
+        bmiState: String,
+        gender: String,
+        age: String,
+    ) {
+        val index = patientList.indexOfFirst { it.id == id }
+
+        val updatedPatient = patientList[index].copy(
+            isBmiCalculated = isCalculated,
+            bmi = bmi,
+            bmiState = bmiState,
+            gender = gender,
+            age = age
+        )
+
+        patientList = patientList.toMutableList().apply {
+            this[index] = updatedPatient
+        }
+    }
+
     fun clean(){
         state = state.copy(name = "")
         

@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -77,7 +78,7 @@ fun TitleText(
 }
 
 @Composable
-fun ResultText(
+fun BmiResultText(
     text: String
 ) {
     Text(
@@ -89,6 +90,25 @@ fun ResultText(
             fontSize = 96.sp,
             fontWeight = FontWeight.ExtraBold,
             textAlign = TextAlign.Center
+        )
+    )
+}
+
+@Composable
+fun BmiStateText(
+    text: String,
+    color: Color
+) {
+    Text(
+        text = text,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp),
+        style = TextStyle(
+            fontSize = 32.sp,
+            fontWeight = FontWeight.ExtraBold,
+            textAlign = TextAlign.Center,
+            color = color
         )
     )
 }
