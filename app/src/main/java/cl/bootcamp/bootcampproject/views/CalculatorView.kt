@@ -184,7 +184,12 @@ fun ContentCalculatorView(
                             "/${age}" +
                             "/${bmiStateText.first}" +
                             "/${state.isCalculated}/"
-                )
+                ) {
+                    launchSingleTop = true
+                    popUpTo(navController.graph.startDestinationId) {
+                        inclusive = true
+                    }
+                }
 
                 viewModel.clean()
             }
