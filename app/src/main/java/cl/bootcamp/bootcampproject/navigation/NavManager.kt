@@ -33,7 +33,7 @@ fun NavManager(
                 navArgument("isCalculated") { type = NavType.BoolType}
             )
         ) {
-            val id = it.arguments?.getInt("id") ?: 0
+            val id = it.arguments?.getInt("id") ?: -1
             val bmi = it.arguments?.getString("bmi") ?: ""
             val gender = it.arguments?.getString("gender") ?: ""
             val age = it.arguments?.getString("age") ?: ""

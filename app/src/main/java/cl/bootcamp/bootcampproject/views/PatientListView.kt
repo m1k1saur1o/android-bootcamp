@@ -35,12 +35,12 @@ import cl.bootcamp.bootcampproject.viewModels.PatientListViewModel
 fun PatientListView(
     viewModel: PatientListViewModel,
     navController: NavController,
-    id: Int?,
-    bmi: String?,
-    gender: String?,
-    age: String?,
-    bmiState: String?,
-    isCalculated: Boolean?
+    id: Int,
+    bmi: String,
+    gender: String,
+    age: String,
+    bmiState: String,
+    isCalculated: Boolean
 ) {
     Scaffold(
         topBar = {
@@ -76,26 +76,25 @@ fun PatientListView(
 fun ContentPatientListView(
     viewModel: PatientListViewModel,
     navController: NavController,
-    id: Int?,
-    bmi: String?,
-    gender: String?,
-    age: String?,
-    bmiState: String?,
-    isCalculated: Boolean?
+    id: Int,
+    bmi: String,
+    gender: String,
+    age: String,
+    bmiState: String,
+    isCalculated: Boolean
 ) {
     val state = viewModel.state
 
-    if (id != 0 && isCalculated!!) {
+    if (id != -1 && isCalculated) {
         viewModel.addBmi(
-            id!!,
+            id,
             isCalculated,
-            bmi!!,
-            bmiState!!,
-            gender!!,
-            age!!
+            bmi,
+            bmiState,
+            gender,
+            age
         )
     }
-
 
     LazyColumn(
         modifier = Modifier

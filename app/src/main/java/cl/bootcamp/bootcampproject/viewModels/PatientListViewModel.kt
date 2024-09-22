@@ -29,7 +29,7 @@ class PatientListViewModel: ViewModel() {
         name: String
     ) {
         val newPatient = state.copy(
-            id = patientList.size + 1,
+            id = patientList.size,
             name = name
         )
         patientList += newPatient
@@ -60,7 +60,6 @@ class PatientListViewModel: ViewModel() {
 
     fun clean(){
         state = state.copy(name = "")
-        
     }
 
     fun onValueName(name: String)
