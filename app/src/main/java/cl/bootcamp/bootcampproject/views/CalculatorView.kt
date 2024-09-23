@@ -124,15 +124,7 @@ fun ContentCalculatorView(
         CalculateButton(
             text = "Calculate"
         ) {
-            if (state.selectedIndex != null) {
-                try {
-                    viewModel.ageCheck()
-                    viewModel.calculateBmi(state.height.toDouble(), state.weight.toDouble())
-                    viewModel.isCalculated()
-                } catch (_: NumberFormatException) {
-                    viewModel.showModal()
-                }
-            } else {
+            if (viewModel.calculateBmi()) {
                 viewModel.showModal()
             }
         }
@@ -141,9 +133,11 @@ fun ContentCalculatorView(
             modifier = Modifier.height(36.dp)
         )
 
-        BmiResultText(
-            text = state.result
-        )
+        if (state.isCalculated) {
+            BmiResultText(
+                text = state.result
+            )
+        }
 
         if (state.showModal) {
             CalculatorModal(
@@ -161,8 +155,7 @@ fun ContentCalculatorView(
         }
 
         if (state.isCalculated) {
-            val bmi = viewModel.getBmi()
-            val bmiStateText = viewModel.generateBmiStateText(bmi)
+            val bmiStateText = viewModel.generateBmiStateText()
 
             BmiStateText(
                 text = bmiStateText.first,
@@ -172,25 +165,28 @@ fun ContentCalculatorView(
             CalculateButton(
                 text = "Save"
             ) {
-                val gender = if (state.selectedIndex == 0) "male" else "female"
-                val bmiResult = viewModel.state.result
-                val age = viewModel.state.age
+                if (viewModel.calculateBmi()) {
+                    viewModel.showModal()
+                } else {
+                    val gender = if (state.selectedIndex == 0) "male" else "female"
+                    val bmiResult = viewModel.state.result
+                    val age = viewModel.state.age
 
-                navController.navigate(
-                    "Home" +
-                            "/${id}" +
-                            "/${bmiResult}" +
-                            "/${gender}" +
-                            "/${age}" +
-                            "/${bmiStateText.first}" +
-                            "/${state.isCalculated}/"
-                ) {
-                    launchSingleTop = true
-                    popUpTo(navController.graph.startDestinationId) {
-                        inclusive = true
+                    navController.navigate(
+                        "Home" +
+                                "/${id}" +
+                                "/${bmiResult}" +
+                                "/${gender}" +
+                                "/${age}" +
+                                "/${bmiStateText.first}" +
+                                "/${state.isCalculated}/"
+                    ) {
+                        launchSingleTop = true
+                        popUpTo(navController.graph.startDestinationId) {
+                            inclusive = true
+                        }
                     }
                 }
-
             }
         }
 

@@ -7,18 +7,23 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cl.bootcamp.bootcampproject.R
+import cl.bootcamp.bootcampproject.ui.theme.russian_violet
 
 @Composable
 fun PatientCard(
@@ -83,7 +88,7 @@ fun CalculatedBmiPatientCard(
             Text(
                 text = name,
                 modifier = Modifier
-                    .padding(horizontal = 12.dp)
+                    .padding(start = 12.dp)
                     .padding(top = 12.dp),
                 style = TextStyle(
                     fontSize = 24.sp
@@ -109,14 +114,19 @@ fun CalculatedBmiPatientCard(
                     )
                 )
 
-                Text(
-                    text = "Gender: $gender",
-                    modifier = Modifier
-                        .padding(4.dp),
-                    style = TextStyle(
-                        fontSize = 16.sp
+                if (gender == "male") {
+                    Icon(painter = painterResource(id = R.drawable.male),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(25.dp)
                     )
-                )
+                } else {
+                    Icon(painter = painterResource(id = R.drawable.female),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(30.dp)
+                    )
+                }
             }
 
             Spacer(
@@ -178,7 +188,8 @@ private fun CalculateBmiButton(
         Text(
             text = text,
             fontSize = 16.sp,
-            fontWeight = FontWeight.ExtraBold
+            fontWeight = FontWeight.ExtraBold,
+            color = russian_violet
         )
     }
 }

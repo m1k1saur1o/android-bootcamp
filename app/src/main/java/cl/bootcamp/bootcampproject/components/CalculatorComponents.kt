@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +20,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cl.bootcamp.bootcampproject.ui.theme.russian_violet
 
 
 @Composable
@@ -48,6 +50,10 @@ fun CalculateButton(
     Button(
         onClick = onClick,
         shape = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(
+            contentColor = Color.White,
+            containerColor = russian_violet
+        ),
         modifier = Modifier
             .fillMaxWidth()
             .padding(32.dp)

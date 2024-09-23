@@ -1,14 +1,17 @@
 package cl.bootcamp.bootcampproject.views
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
@@ -27,6 +30,8 @@ import cl.bootcamp.bootcampproject.components.CancelSaveButton
 import cl.bootcamp.bootcampproject.components.PatientCard
 import cl.bootcamp.bootcampproject.components.SavePatientButton
 import cl.bootcamp.bootcampproject.components.TitleBar
+import cl.bootcamp.bootcampproject.ui.theme.columbia_blue
+import cl.bootcamp.bootcampproject.ui.theme.tropical_indigo
 import cl.bootcamp.bootcampproject.viewModels.PatientListViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -114,20 +119,33 @@ fun ContentPatientListView(
                     gender = item.gender,
                     bmiState = item.bmiState,
                     modifier = Modifier
+                        .border(
+                            width = 4.dp, // Thickness of the border
+                            color = tropical_indigo, // Border color
+                            shape = RoundedCornerShape(8.dp) // Corner radius of the border
+                        )
                         .fillMaxSize()
-                        .padding(8.dp)
                 )
             } else {
                 PatientCard(
                     name = item.name,
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(8.dp),
+                        .border(
+                            width = 4.dp, // Thickness of the border
+                            color = columbia_blue, // Border color
+                            shape = RoundedCornerShape(8.dp) // Corner radius of the border
+                        )
+                        .fillMaxSize(),
                     onClick = {
                         navController.navigate("BmiCalculator/${item.id}/")
                     }
                 )
             }
+
+            Spacer(
+                Modifier
+                    .padding(top = 4.dp)
+            )
 
         }
     }

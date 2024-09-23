@@ -38,7 +38,7 @@ class CalculatorViewModel : ViewModel() {
         state = state.copy(selectedIndex = index)
     }
 
-    fun calculateBmi(
+    private fun calculateBmi(
         height: Double,
         weight: Double
     ) {
@@ -54,15 +54,15 @@ class CalculatorViewModel : ViewModel() {
         state = state.copy(showModal = false)
     }
 
-    fun isCalculated() {
+    private fun isCalculated() {
         state = state.copy(isCalculated = true)
     }
 
-    fun isNotCalculated() {
+    private fun isNotCalculated() {
         state = state.copy(isCalculated = false)
     }
 
-    fun getBmi(): Double {
+    private fun getBmi(): Double {
         return state.result.toDouble()
     }
 
@@ -98,7 +98,8 @@ class CalculatorViewModel : ViewModel() {
         )
     }
 
-    fun generateBmiStateText(bmi: Double): Pair<String, Color> {
+    fun generateBmiStateText(): Pair<String, Color> {
+        val bmi = getBmi()
         return when {
             bmi < 18.5 -> Pair("Underweight", Color.Blue)
             bmi in 18.5 .. 24.9 -> Pair("Healthy", Color.Green)
@@ -110,7 +111,7 @@ class CalculatorViewModel : ViewModel() {
         }
     }
 
-    fun ageCheck() {
+    private fun ageCheck() {
         state.age.toInt()
     }
 
@@ -132,5 +133,22 @@ class CalculatorViewModel : ViewModel() {
             showModal = false,
             isCalculated = false,
         )
+    }
+
+    fun calculateBmi(): Boolean {
+        if (state.selectedIndex != null) {
+            try {
+                ageCheck()
+                calculateBmi(state.height.toDouble(), state.weight.toDouble())
+                isCalculated()
+            } catch (_: NumberFormatException) {
+                isNotCalculated()
+                return true
+            }
+        } else {
+            isNotCalculated()
+            return true
+        }
+        return false
     }
 }

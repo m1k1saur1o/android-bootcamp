@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -19,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cl.bootcamp.bootcampproject.ui.theme.russian_violet
 
 @Composable
 fun AddPatientModal(
@@ -51,7 +53,7 @@ fun AddPatientFloatingButton(
 ) {
     FloatingActionButton(
         onClick = onClick,
-        containerColor = Color.Red,
+        containerColor = russian_violet,
         contentColor = Color.White,
     ) {
         Icon(imageVector = Icons.Filled.Add, contentDescription = "Add")
@@ -67,7 +69,11 @@ fun SavePatientButton (
         onClick = onClick,
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
-            .padding(16.dp)
+            .padding(16.dp),
+        colors = ButtonDefaults.buttonColors(
+            contentColor = Color.White,
+            containerColor = russian_violet
+        ),
     ) {
         Text(
             text = text,
