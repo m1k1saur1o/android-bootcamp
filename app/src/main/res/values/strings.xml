@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">BootcampProject</string>
+    <string name="home">Home</string>
+    <string name="cart">Cart</string>
+    <string name="store_title">Shoe Tap Store</string>
+    <string name="product">Product</string>
 </resources>
