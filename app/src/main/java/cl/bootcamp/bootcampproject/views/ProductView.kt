@@ -44,6 +44,7 @@ import androidx.navigation.NavController
 import cl.bootcamp.bootcampproject.R
 import cl.bootcamp.bootcampproject.components.AppBarView
 import cl.bootcamp.bootcampproject.components.errorToast
+import cl.bootcamp.bootcampproject.model.CartItemState
 import cl.bootcamp.bootcampproject.navigation.Routes
 import cl.bootcamp.bootcampproject.viewModels.CartViewModel
 import cl.bootcamp.bootcampproject.viewModels.ProductViewModel
@@ -227,12 +228,15 @@ fun ContentProductView(
                     if (productViewModel.sizeSelected == -1 || (productViewModel.colorSelected == -1)) {
                         errorToast(context)
                     } else {
-                        cartViewModel.addToCart(
-                            productViewModel.state.copy(
-                                colorSelected = productViewModel.colorSelected,
-                                sizeSelected = productViewModel.sizeSelected,
-                                quantity = 1
-                            )
+                        val cartItem = CartItemState(
+                            name = productViewModel.state.name,
+                            price = productViewModel.state.price.first,
+                            textPrice = productViewModel.state.price.second,
+                            image = productViewModel.state.image,
+                            quantity = 1
+                        )
+                        cartViewModel.insertCartItem(
+                            item = cartItem
                         )
                         navController.navigate(
                             Routes.StoreView.route
@@ -247,11 +251,15 @@ fun ContentProductView(
                     if (productViewModel.sizeSelected == -1) {
                         errorToast(context)
                     } else {
-                        cartViewModel.addToCart(
-                            productViewModel.state.copy(
-                                sizeSelected = productViewModel.sizeSelected,
-                                quantity = 1
-                            )
+                        val cartItem = CartItemState(
+                            name = productViewModel.state.name,
+                            price = productViewModel.state.price.first,
+                            textPrice = productViewModel.state.price.second,
+                            image = productViewModel.state.image,
+                            quantity = 1
+                        )
+                        cartViewModel.insertCartItem(
+                            item = cartItem
                         )
                         navController.navigate(
                             Routes.StoreView.route

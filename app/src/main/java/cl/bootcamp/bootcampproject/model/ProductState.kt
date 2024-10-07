@@ -11,5 +11,4 @@ data class ProductState(
     var isLiked: Boolean = false,
     var colorSelected: Int? = null,
     var sizeSelected: Int? = null,
-    var quantity: Int = 0
 )

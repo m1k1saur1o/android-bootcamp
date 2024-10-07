@@ -12,11 +12,17 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -60,6 +66,7 @@ fun ContentCartView(
     cartViewModel: CartViewModel,
     modifier: Modifier = Modifier,
 ) {
+    val cartItems by cartViewModel.cartList.collectAsState()
 
     Column(
         modifier = modifier
@@ -67,11 +74,11 @@ fun ContentCartView(
         LazyColumn(
             modifier = Modifier.weight(1f)
         ) {
-            items(cartViewModel.cartList) { items ->
+            items(cartViewModel.cartList.value) { items ->
                 if (items.quantity > 0) {
                     CartProductCard(
                         name = items.name,
-                        price = items.price.second,
+                        price = items.textPrice,
                         image = items.image,
                         quantity = items.quantity,
                         onAddQuantity = {
@@ -87,46 +94,55 @@ fun ContentCartView(
             }
         }
 
-        Row(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-
-        ) {
-            Text(
+        if (cartItems.isNotEmpty()) {
+            Row(
                 modifier = Modifier
-                    .padding(16.dp),
-                text = "$${ cartViewModel.totalCost }",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
-            )
+                    .padding(8.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
 
-            Button(
-                onClick = {
-                    if (cartViewModel.cartList.isNotEmpty()){
-                        cartViewModel.clearCart()
-                        buyToast(context)
-                    }
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colorResource(R.color.black)
-                ),
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier
-                    .padding(16.dp)
-                    .height(60.dp)
-                    .width(100.dp),
             ) {
                 Text(
-                    text = "Buy",
-                    fontSize = 18.sp
+                    modifier = Modifier
+                        .padding(16.dp),
+                    text = "$${ cartViewModel.totalCost }",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold
                 )
+
+                IconButton(
+                    onClick = { cartViewModel.clearCart() }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        tint = colorResource(R.color.black),
+                        contentDescription = null
+                    )
+                }
+
+                Button(
+                    onClick = {
+                        if (cartItems.isNotEmpty()){
+                            cartViewModel.clearCart()
+                            buyToast(context)
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorResource(R.color.black)
+                    ),
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .height(60.dp)
+                        .width(100.dp),
+                ) {
+                    Text(
+                        text = "Buy",
+                        fontSize = 18.sp
+                    )
+                }
             }
         }
     }
-
-
-    
 }
