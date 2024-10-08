@@ -21,7 +21,7 @@ class ContactsRepository @Inject constructor(
 
     suspend fun  deleteContact(
         contact: ContactState
-    ) = contactsDao.updateContact(contact)
+    ) = contactsDao.deleteContact(contact)
 
     fun getContacts(): Flow<List<ContactState>>
     = contactsDao

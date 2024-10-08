@@ -7,9 +7,9 @@ import androidx.room.PrimaryKey
 data class ContactState(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val name: String = "",
-    val phone: String = "",
-    val email: String = "",
-    val profileImage: String = "",
-    val birthdate: String= "",
+    var name: String = "",
+    var phone: String = "",
+    var email: String = "",
+    var profileImage: String = "",
+    var birthdate: String= "",
 )

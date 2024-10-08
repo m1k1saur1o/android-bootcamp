@@ -16,6 +16,9 @@ class ContactsViewModel @Inject constructor(
     private val repository: ContactsRepository
 ): ViewModel()
 {
+    private val _contact = MutableStateFlow<ContactState?>(null)
+    val contact = _contact.asStateFlow()
+
     private val _contactsList = MutableStateFlow<List<ContactState>>(emptyList())
     val contactsList = _contactsList.asStateFlow()
 
@@ -38,5 +41,24 @@ class ContactsViewModel @Inject constructor(
     fun deleteContact(contact: ContactState) = viewModelScope.launch { repository.deleteContact(contact) }
 
     fun updateContact(contact: ContactState) = viewModelScope.launch { repository.updateContact(contact) }
+
+    fun getContactById(
+        id: Long
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getContactsById(id).collect { item ->
+                _contact.value = item?.let {
+                    ContactState(
+                        id = it.id,
+                        name = it.name,
+                        phone = it.phone,
+                        email = it.email,
+                        birthdate = it.birthdate,
+                        profileImage = it.profileImage
+                    )
+                }
+            }
+        }
+    }
 
 }
